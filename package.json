@@ -1,0 +1,19 @@
+{
+  "name": "routematch",
+  "version": "0.0.1",
+  "description": "simply match a route using path-to-regexp",
+  "keywords": [],
+  "author": "Matthew Mueller <mattmuelle@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/MatthewMueller/routematch.git"
+  },
+  "dependencies": {
+    "path-to-regexp": "^1.7.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "should": "*"
+  },
+  "main": "index"
+}

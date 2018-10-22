@@ -1,5 +1,8 @@
+# 1.0.0 / 2018-10-22
 
-0.0.1 / 2010-01-03
-==================
+- minor tweaks and api change
+- minor modifications
 
-  * Initial release
+# 0.0.1 / 2010-01-03
+
+- Initial release

@@ -3,6 +3,7 @@
  */
 
 var Regexp = require('path-to-regexp')
+var slice = Array.prototype.slice
 
 /**
  * Export `routematch`
@@ -14,11 +15,8 @@ module.exports = routematch
  * Export `routematch`
  */
 
-function routematch(pathname, routes) {
-  if (typeof routes === 'string') {
-    routes = [routes]
-  }
-
+function routematch(pathname) {
+  var routes = slice.call(arguments, 1)
   var params = {}
   for (var i = 0, len = routes.length; i < len; i++) {
     var m = match(routes[i], params, pathname)

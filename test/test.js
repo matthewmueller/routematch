@@ -20,10 +20,11 @@ describe('routematch', function() {
   })
 
   it('should work with fallbacks', function() {
-    const { user, author, article } = match('/matt/node.js-guide', [
+    const { user, author, article } = match(
+      '/matt/node.js-guide',
       '/user/:user',
-      '/:author/:article',
-    ])
+      '/:author/:article'
+    )
     assert.equal(author, 'matt')
     assert.equal(article, 'node.js-guide')
     assert.equal(user, null)

@@ -14,14 +14,14 @@ module.exports = routematch
  * Export `routematch`
  */
 
-function routematch (pathname, fallbacks) {
-  if (typeof fallbacks === 'string') {
-    fallbacks = [fallbacks]
+function routematch(pathname, routes) {
+  if (typeof routes === 'string') {
+    routes = [routes]
   }
 
   var params = {}
-  for (var i = 0, len = fallbacks.length; i < len; i++) {
-    var m = match(fallbacks[i], params, pathname)
+  for (var i = 0, len = routes.length; i < len; i++) {
+    var m = match(routes[i], params, pathname)
     if (m) return params
   }
   return params
@@ -31,7 +31,7 @@ function routematch (pathname, fallbacks) {
  * Patch replace
  */
 
-function match (path, params, pathname) {
+function match(path, params, pathname) {
   var keys = []
   var regexp = Regexp(path, keys)
   var m = regexp.exec(pathname)

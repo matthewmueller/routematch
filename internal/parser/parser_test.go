@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/matthewmueller/diff"
-	"github.com/matthewmueller/routematch/internal/parser"
+	"github.com/matthewmueller/enroute/internal/parser"
 )
 
 func equal(t *testing.T, input, expected string) {

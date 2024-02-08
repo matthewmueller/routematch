@@ -1,8 +1,8 @@
-# routematch
+# enroute
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/matthewmueller/routematch.svg)](https://pkg.go.dev/github.com/matthewmueller/routematch)
+[![Go Reference](https://pkg.go.dev/badge/github.com/matthewmueller/enroute.svg)](https://pkg.go.dev/github.com/matthewmueller/enroute)
 
-A simple route to path matcher. The parser was extracted from [livebud/mux](https://github.com/livebud/mux).
+A simple route-to-path matcher. The parser was extracted from [livebud/mux](https://github.com/livebud/mux).
 
 ## Features
 
@@ -14,7 +14,7 @@ A simple route to path matcher. The parser was extracted from [livebud/mux](http
 ## Install
 
 ```sh
-go get github.com/matthewmueller/routematch
+go get github.com/matthewmueller/enroute
 ```
 
 ## Example
@@ -25,22 +25,22 @@ package main
 import (
 	"net/http"
 
-	"github.com/matthewmueller/routematch"
+	"github.com/matthewmueller/enroute"
 )
 
 func main() {
-  matcher := routematch.New()
-  matcher.Insert("/", "index.html")
-  matcher.Insert("/users/{id}", "users/show.html")
-  matcher.Insert("/posts/{post_id}/comments/{id}", "posts/comments/show.html")
-  matcher.Insert("/fly/{from}-{to}", "fly/routes.html")
-  matcher.Insert("/v{major|[0-9]+}.{minor|[0-9]+}", "version.html")
-  matcher.Insert("/{owner}/{repo}/{branch}/{path*}", "repo.html")
-  match, _ := matcher.Match("/matthewmueller/routematch/main/routematch.go")
+  r := enroute.New()
+  r.Insert("/", "index.html")
+  r.Insert("/users/{id}", "users/show.html")
+  r.Insert("/posts/{post_id}/comments/{id}", "posts/comments/show.html")
+  r.Insert("/fly/{from}-{to}", "fly/routes.html")
+  r.Insert("/v{major|[0-9]+}.{minor|[0-9]+}", "version.html")
+  r.Insert("/{owner}/{repo}/{branch}/{path*}", "repo.html")
+  match, _ := r.Match("/matthewmueller/enroute/main/enroute.go")
   fmt.Println(match.Path) // repo.html
   fmt.Println(match.Route.String()) // /{owner}/{repo}/{branch}/{path*}
   fmt.Println(match.Slots[0].Key, match.Slots[0].Value) // owner matthewmueller
-  fmt.Println(match.Slots[1].Key, match.Slots[1].Value) // repo routematch
+  fmt.Println(match.Slots[1].Key, match.Slots[1].Value) // repo enroute
   // ...
 }
 ```

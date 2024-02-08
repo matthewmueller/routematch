@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/matthewmueller/routematch/internal/ast"
-	"github.com/matthewmueller/routematch/internal/lexer"
-	"github.com/matthewmueller/routematch/internal/token"
+	"github.com/matthewmueller/enroute/internal/ast"
+	"github.com/matthewmueller/enroute/internal/lexer"
+	"github.com/matthewmueller/enroute/internal/token"
 )
 
 func New(l *lexer.Lexer) *Parser {

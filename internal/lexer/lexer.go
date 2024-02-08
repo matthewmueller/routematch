@@ -6,7 +6,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/matthewmueller/routematch/internal/token"
+	"github.com/matthewmueller/enroute/internal/token"
 )
 
 type state = func(l *Lexer) token.Type

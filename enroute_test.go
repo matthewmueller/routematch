@@ -1,4 +1,4 @@
-package routematch_test
+package enroute_test
 
 import (
 	"errors"
@@ -8,10 +8,10 @@ import (
 
 	"github.com/matryer/is"
 	"github.com/matthewmueller/diff"
-	"github.com/matthewmueller/routematch"
+	"github.com/matthewmueller/enroute"
 )
 
-func insertEqual(t *testing.T, tree *routematch.Tree, route string, expected string) {
+func insertEqual(t *testing.T, tree *enroute.Tree, route string, expected string) {
 	t.Helper()
 	t.Run(route, func(t *testing.T) {
 		t.Helper()
@@ -29,7 +29,7 @@ func insertEqual(t *testing.T, tree *routematch.Tree, route string, expected str
 
 // https://en.wikipedia.org/wiki/Radix_tree#Insertion
 func TestWikipediaInsert(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/test", `
 		/test [routable=/test]
 	`)
@@ -51,7 +51,7 @@ func TestWikipediaInsert(t *testing.T) {
 		•••••er [routable=/slower]
 		•water [routable=/water]
 	`)
-	tree = routematch.New()
+	tree = enroute.New()
 	insertEqual(t, tree, "/tester", `
 		/tester [routable=/tester]
 	`)
@@ -59,7 +59,7 @@ func TestWikipediaInsert(t *testing.T) {
 		/test [routable=/test]
 		•••••er [routable=/tester]
 	`)
-	tree = routematch.New()
+	tree = enroute.New()
 	insertEqual(t, tree, "/test", `
 		/test [routable=/test]
 	`)
@@ -78,7 +78,7 @@ func TestWikipediaInsert(t *testing.T) {
 }
 
 func TestSampleInsert(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/hello/{name}", `
 		/hello/{name} [routable=/hello/{name}]
 	`)
@@ -113,7 +113,7 @@ func TestSampleInsert(t *testing.T) {
 }
 
 func TestEqual(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/hello/{name}", `
 		/hello/{name} [routable=/hello/{name}]
 	`)
@@ -123,7 +123,7 @@ func TestEqual(t *testing.T) {
 		••••••/{name} [routable=/hello/{name}]
 	`)
 	insertEqual(t, tree, "/hello", `route already exists "/hello"`)
-	tree = routematch.New()
+	tree = enroute.New()
 	insertEqual(t, tree, "/{name}", `
 		/{name} [routable=/{name}]
 	`)
@@ -131,7 +131,7 @@ func TestEqual(t *testing.T) {
 }
 
 func TestDifferentSlots(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/{name}", `
 		/{name} [routable=/{name}]
 	`)
@@ -145,7 +145,7 @@ func TestDifferentSlots(t *testing.T) {
 		••••••••else [routable=/{first}/else]
 		••••••••{last} [routable=/{first}/{last}]
 	`)
-	tree = routematch.New()
+	tree = enroute.New()
 	insertEqual(t, tree, "/{name}", `
 		/{name} [routable=/{name}]
 	`)
@@ -157,7 +157,7 @@ func TestDifferentSlots(t *testing.T) {
 }
 
 func TestPathAfter(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/{name}", `
 		/{name} [routable=/{name}]
 	`)
@@ -179,7 +179,7 @@ func TestPathAfter(t *testing.T) {
 }
 
 func TestOptionals(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/{name?}", `
 		/ [routable=/]
 		•{name} [routable=/{name}]
@@ -209,7 +209,7 @@ func TestOptionals(t *testing.T) {
 }
 
 func TestWildcards(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/{name*}", `
 		/ [routable=/]
 		•{name*} [routable=/{name*}]
@@ -239,7 +239,7 @@ func TestWildcards(t *testing.T) {
 }
 
 func TestInsertRegexp(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/{name|[A-Z]}", `
 		/{name|^[A-Z]$} [routable=/{name|^[A-Z]$}]
 	`)
@@ -287,7 +287,7 @@ func TestInsertRegexp(t *testing.T) {
 }
 
 func TestInsertRegexpSlotFirst(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/{name}", `
 		/{name} [routable=/{name}]
 	`)
@@ -299,7 +299,7 @@ func TestInsertRegexpSlotFirst(t *testing.T) {
 }
 
 func TestRootSwap(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/hello", `
 		/hello [routable=/hello]
 	`)
@@ -310,7 +310,7 @@ func TestRootSwap(t *testing.T) {
 }
 
 func TestPriority(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/v{version}", `
 	/v{version} [routable=/v{version}]
 	`)
@@ -319,7 +319,7 @@ func TestPriority(t *testing.T) {
 	••2 [routable=/v2]
 	••{version} [routable=/v{version}]
 	`)
-	tree = routematch.New()
+	tree = enroute.New()
 	insertEqual(t, tree, "/v{version}", `
 		/v{version} [routable=/v{version}]
 	`)
@@ -330,7 +330,7 @@ func TestPriority(t *testing.T) {
 }
 
 func TestSlotSplit(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/users/{id}/edit", `
 		/users/{id}/edit [routable=/users/{id}/edit]
 	`)
@@ -342,7 +342,7 @@ func TestSlotSplit(t *testing.T) {
 }
 
 func TestInvalidSlot(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/{a}", `
 		/{a} [routable=/{a}]
 	`)
@@ -363,7 +363,7 @@ type Request struct {
 	Expect string
 }
 
-func matchPath(t *testing.T, tree *routematch.Tree, path string, expect string) {
+func matchPath(t *testing.T, tree *enroute.Tree, path string, expect string) {
 	t.Helper()
 	match, err := tree.Match(path)
 	if err != nil {
@@ -383,7 +383,7 @@ func matchPath(t *testing.T, tree *routematch.Tree, path string, expect string) 
 
 func matchEqual(t *testing.T, routes Routes) {
 	t.Helper()
-	tree := routematch.New()
+	tree := enroute.New()
 	for _, route := range routes {
 		if err := tree.Insert(route.Route, "random"); err != nil {
 			t.Fatal(err)
@@ -455,22 +455,22 @@ func TestSampleMatch(t *testing.T) {
 
 func TestNonRoutableNoMatch(t *testing.T) {
 	is := is.New(t)
-	tree := routematch.New()
+	tree := enroute.New()
 	is.NoErr(tree.Insert("/hello", ""))
 	is.NoErr(tree.Insert("/world", ""))
 	match, err := tree.Match("/")
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(match, nil)
 }
 
 func TestNoRoutes(t *testing.T) {
 	is := is.New(t)
-	tree := routematch.New()
+	tree := enroute.New()
 	match, err := tree.Match("/")
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(match, nil)
 	match, err = tree.Match("/a")
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(match, nil)
 }
 
@@ -602,7 +602,7 @@ func TestOptional(t *testing.T) {
 }
 
 func TestLastOptional(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/slash/{last?}/", `
 		/slash [routable=/slash]
 		••••••/{last} [routable=/slash/{last}]
@@ -630,7 +630,7 @@ func TestWildcard(t *testing.T) {
 }
 
 func TestLastWildcard(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/slash/{last*}/", `
 		/slash [routable=/slash]
 		••••••/{last*} [routable=/slash/{last*}]
@@ -651,7 +651,7 @@ func TestMatchDashedSlots(t *testing.T) {
 
 func TestBackupTree(t *testing.T) {
 	is := is.New(t)
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/{post_id}/comments", `
 		/{post_id}/comments [routable=/{post_id}/comments]
 	`)
@@ -669,7 +669,7 @@ func TestBackupTree(t *testing.T) {
 }
 
 func TestToRoutable(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/last", `
 		/last [routable=/last]
 	`)
@@ -755,7 +755,7 @@ func TestMatchRegexp(t *testing.T) {
 }
 
 func TestResource(t *testing.T) {
-	tree := routematch.New()
+	tree := enroute.New()
 	insertEqual(t, tree, "/{id}/edit", `
 		/{id}/edit [routable=/{id}/edit]
 	`)
@@ -775,7 +775,7 @@ func TestResource(t *testing.T) {
 
 func TestFind(t *testing.T) {
 	is := is.New(t)
-	tree := routematch.New()
+	tree := enroute.New()
 	a := "a"
 	b := "b"
 	is.NoErr(tree.Insert(`/{post_id}/comments`, a))
@@ -789,13 +789,13 @@ func TestFind(t *testing.T) {
 	is.Equal(bn.Route.String(), `/{post_id}.{format}`)
 	is.Equal(bn.Path, b)
 	cn, err := tree.Find(`/`)
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(cn, nil)
 }
 
 func TestFindByPrefix(t *testing.T) {
 	is := is.New(t)
-	tree := routematch.New()
+	tree := enroute.New()
 	a := "a"
 	is.NoErr(tree.Insert("/", a))
 	node, err := tree.FindByPrefix("/{post_id}/comments")
@@ -830,22 +830,22 @@ func TestFindByPrefix(t *testing.T) {
 	is.Equal(node.Route.String(), "/")
 
 	// No root initially
-	tree = routematch.New()
+	tree = enroute.New()
 	is.NoErr(tree.Insert("/{post_id}/comments", a))
 	node, err = tree.FindByPrefix("/{post_id}/comments")
 	is.NoErr(err)
 	is.Equal(node.Route.String(), "/{post_id}/comments")
 	node, err = tree.FindByPrefix("/{post_id}/")
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(node, nil)
 	node, err = tree.FindByPrefix("/{post_id}")
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(node, nil)
 	node, err = tree.FindByPrefix("/")
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(node, nil)
 	node, err = tree.FindByPrefix("/a")
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(node, nil)
 	// Add a subpath
 	is.NoErr(tree.Insert("/{post_id}", a))
@@ -859,10 +859,10 @@ func TestFindByPrefix(t *testing.T) {
 	is.NoErr(err)
 	is.Equal(node.Route.String(), "/{post_id}")
 	node, err = tree.FindByPrefix("/")
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(node, nil)
 	node, err = tree.FindByPrefix("/a")
-	is.True(errors.Is(err, routematch.ErrNoMatch))
+	is.True(errors.Is(err, enroute.ErrNoMatch))
 	is.Equal(node, nil)
 	// Add the root
 	is.NoErr(tree.Insert("/", a))
@@ -884,14 +884,14 @@ func TestFindByPrefix(t *testing.T) {
 }
 
 func ExampleMatch() {
-	matcher := routematch.New()
+	matcher := enroute.New()
 	matcher.Insert("/", "index.html")
 	matcher.Insert("/users/{id}", "users/show.html")
 	matcher.Insert("/posts/{post_id}/comments/{id}", "posts/comments/show.html")
-	matcher.Insert("/fly/{from}-{to}", "fly/routes.html")
+	matcher.Insert("/fly/{from}-{to}", "fly/enroute.html")
 	matcher.Insert("/v{major|[0-9]+}.{minor|[0-9]+}", "version.html")
 	matcher.Insert("/{owner}/{repo}/{branch}/{path*}", "repo.html")
-	match, err := matcher.Match("/matthewmueller/routematch/main/internal/parser/parser.go")
+	match, err := matcher.Match("/matthewmueller/routes/main/internal/parser/parser.go")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -911,7 +911,7 @@ func ExampleMatch() {
 	// /{owner}/{repo}/{branch}/{path*}
 	// repo.html
 	// owner matthewmueller
-	// repo routematch
+	// repo routes
 	// branch main
 	// path internal/parser/parser.go
 }

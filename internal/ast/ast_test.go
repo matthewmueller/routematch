@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
-	"github.com/matthewmueller/routematch/internal/parser"
+	"github.com/matthewmueller/enroute/internal/parser"
 )
 
 func TestSplit(t *testing.T) {

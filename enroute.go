@@ -1,4 +1,4 @@
-package routematch
+package enroute
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/matthewmueller/routematch/internal/ast"
-	"github.com/matthewmueller/routematch/internal/parser"
+	"github.com/matthewmueller/enroute/internal/ast"
+	"github.com/matthewmueller/enroute/internal/parser"
 )
 
 var ErrDuplicate = fmt.Errorf("route")

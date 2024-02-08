@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/matthewmueller/diff"
-	"github.com/matthewmueller/routematch/internal/lexer"
+	"github.com/matthewmueller/enroute/internal/lexer"
 )
 
 func print(input string) string {

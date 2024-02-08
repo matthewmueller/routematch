@@ -1,4 +1,4 @@
-module github.com/matthewmueller/routematch
+module github.com/matthewmueller/enroute
 
 go 1.21.0
 
